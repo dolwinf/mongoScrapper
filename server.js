@@ -34,22 +34,26 @@ app.get("/scrape", function(req, res) {
   axios.get("http://thehackernews.com").then(function(response) {
     var $ = cheerio.load(response.data);
 
-    var result = {};
+    $("div.body-post").each(function(i, item) {
+      var link = $(this)
+        .children("a")
+        .attr("href");
 
-    var title = $("h2.home-title").text();
-    // var link = "div.body-post".children("a.story-link").attr("href");
+      var title = $(this)
+        .children("a")
+        .children("div.home-post-box")
+        .children("div.home-right")
+        .children("h2.home-title")
+        .text();
 
-    result.title = title;
-    // result.link = link;
+      console.log(link);
+      console.log(title);
+    });
+
     console.log(result);
     res.send("scrape complete");
   });
 });
-
-//div class="body-post-clear" main div
-//a class="story-link"
-//div class="clear home-right"
-//h2 class="home-title"
 
 app.listen(PORT, function() {
   console.log("Server running on port", PORT);
