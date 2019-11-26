@@ -30,11 +30,11 @@ app.get("/", function(req, res) {
 });
 
 app.get("/scrape", function(req, res) {
-  console.log("Api hit");
   axios.get("http://thehackernews.com").then(function(response) {
     var $ = cheerio.load(response.data);
 
     $("div.body-post").each(function(i, item) {
+      var result = {};
       var link = $(this)
         .children("a")
         .attr("href");
@@ -46,12 +46,10 @@ app.get("/scrape", function(req, res) {
         .children("h2.home-title")
         .text();
 
-      console.log(link);
-      console.log(title);
+      result.link = link;
+      result.title = title;
+      res.json(result);
     });
-
-    console.log(result);
-    res.send("scrape complete");
   });
 });
 
