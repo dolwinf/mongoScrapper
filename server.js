@@ -19,7 +19,7 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Database configuration
-var collections = ["scrapedData"];
+
 mongoose.connect(
   "mongodb://dolwin:mongo#333@ds249717.mlab.com:49717/mongoscrapper",
   { useNewUrlParser: true }
@@ -30,27 +30,36 @@ app.get("/", function(req, res) {
 });
 
 app.get("/scrape", function(req, res) {
-  axios.get("http://thehackernews.com").then(function(response) {
-    var $ = cheerio.load(response.data);
+  db.Article.remove({}).then(function() {
+    axios.get("http://thehackernews.com").then(function(response) {
+      var $ = cheerio.load(response.data);
 
-    $("div.body-post").each(function(i, item) {
-      var result = {};
-      var link = $(this)
-        .children("a")
-        .attr("href");
+      $("div.body-post").each(function(i, item) {
+        var result = {};
+        var link = $(this)
+          .children("a")
+          .attr("href");
 
-      var title = $(this)
-        .children("a")
-        .children("div.home-post-box")
-        .children("div.home-right")
-        .children("h2.home-title")
-        .text();
+        var title = $(this)
+          .children("a")
+          .children("div.home-post-box")
+          .children("div.home-right")
+          .children("h2.home-title")
+          .text();
 
-      result.link = link;
-      result.title = title;
-      res.json(result);
+        result.link = link;
+        result.title = title;
+
+        db.Article.create(result).then(function(data) {
+          console.log(data);
+        });
+      });
     });
   });
+});
+
+app.get("/articles", function(req, res) {
+  db.Article.find({}).then(data => res.json(data));
 });
 
 app.listen(PORT, function() {
