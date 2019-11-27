@@ -71,6 +71,11 @@ app.get("/articles", function(req, res) {
   db.Article.find({}).then(data => res.json(data));
 });
 
+app.post("/delete/:id", function(req, res) {
+  db.Article.deleteOne({ _id: req.params.id }).then(function(data) {
+    res.end();
+  });
+});
 app.listen(PORT, function() {
   console.log("Server running on port", PORT);
 });
