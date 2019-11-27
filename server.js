@@ -30,7 +30,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/scrape", function(req, res) {
-  db.Article.remove({}).then(function() {
+  db.Article.deleteMany({}).then(function() {
     axios.get("http://thehackernews.com").then(function(response) {
       var $ = cheerio.load(response.data);
 
@@ -40,6 +40,13 @@ app.get("/scrape", function(req, res) {
           .children("a")
           .attr("href");
 
+        var summary = $(this)
+          .children("a")
+          .children("div.home-post-box")
+          .children("div.home-right")
+          .children("div.home-desc")
+          .text();
+
         var title = $(this)
           .children("a")
           .children("div.home-post-box")
@@ -47,6 +54,7 @@ app.get("/scrape", function(req, res) {
           .children("h2.home-title")
           .text();
 
+        result.summary = summary;
         result.link = link;
         result.title = title;
 

@@ -14,7 +14,7 @@ $(".db").on("click", function() {
       
       <div class="card-body">
         <h5 class="card-title">${item.title}</h5>
-        <p class="card-text">${item.link}</p>
+        <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
         <a href="#" class="btn btn-primary">Save article</a>
       </div>
     </div>`;
