@@ -64,6 +64,7 @@ app.get("/scrape", function(req, res) {
       });
     });
   });
+  res.json("Done");
 });
 
 app.get("/articles", function(req, res) {

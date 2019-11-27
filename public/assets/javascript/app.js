@@ -2,7 +2,10 @@ $(".scrape").on("click", function(e) {
   e.preventDefault();
   console.log("clicked");
   $.get("/scrape").then(function(data) {
-    console.log(data);
+    console.log("Done");
+    $("#news-articles").html(
+      "<p>Scrape complete. Click Get DB data to retireve data from Mongo DB</p>"
+    );
   });
 });
 
