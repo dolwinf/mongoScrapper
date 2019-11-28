@@ -46,3 +46,31 @@ $(".db").on("click", function() {
     });
   });
 });
+
+$(".sa").on("click", function(e) {
+  console.log("clicked");
+  $("#news-articles").empty();
+
+  $.get("/saved").then(function(data) {
+    data.forEach(item => {
+      var card = `<div class="card ${item._id}" >
+      
+      <div class="card-body">
+        <h5 class="card-title">${item.title}</h5>
+        <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
+        <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
+       
+    
+      </div>
+    </div>`;
+      $("#news-articles").prepend(card);
+      $(".rsave").on("click", function() {
+        var id = $(this).attr("id");
+        var classID = $(this).closest(".card");
+        $.post("/removesaved/" + id).then(function() {
+          $(classID).remove();
+        });
+      });
+    });
+  });
+});

@@ -77,6 +77,19 @@ app.post("/delete/:id", function(req, res) {
   });
 });
 
+app.post("/removesaved/:id", function(req, res) {
+  db.Article.findByIdAndUpdate({ _id: req.params.id }, { issaved: false }).then(
+    function(data) {
+      res.end();
+    }
+  );
+});
+
+app.get("/saved", function(req, res) {
+  db.Article.find({ issaved: true }).then(function(data) {
+    res.json(data);
+  });
+});
 app.post("/saved/:id", function(req, res) {
   db.Article.findByIdAndUpdate({ _id: req.params.id }, { issaved: true }).then(
     function() {
