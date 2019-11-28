@@ -76,6 +76,14 @@ app.post("/delete/:id", function(req, res) {
     res.end();
   });
 });
+
+app.post("/saved/:id", function(req, res) {
+  db.Article.findByIdAndUpdate({ _id: req.params.id }, { issaved: true }).then(
+    function() {
+      res.send("Saved articles");
+    }
+  );
+});
 app.listen(PORT, function() {
   console.log("Server running on port", PORT);
 });

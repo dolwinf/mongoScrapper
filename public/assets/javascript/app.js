@@ -20,6 +20,7 @@ $(".db").on("click", function() {
         <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
         <a class="btn btn-primary save" id="${item._id}">Save article</a>
         <a class="btn btn-danger delete" id="${item._id}">Delete article</a>
+    
       </div>
     </div>`;
 
@@ -33,6 +34,13 @@ $(".db").on("click", function() {
         $.post("/delete/" + id).then(() => {
           console.log(classID);
           $(classID).remove();
+        });
+      });
+
+      $(".save").on("click", function() {
+        var id = $(this).attr("id");
+        $.post("/saved/" + id).then(function(data) {
+          console.log(data);
         });
       });
     });
