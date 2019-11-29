@@ -53,13 +53,18 @@ $(".sa").on("click", function(e) {
 
   $.get("/saved").then(function(data) {
     data.forEach(item => {
+      console.log(item.notes);
+      // var notes = [];
+      // item.note.forEach(note => notes.push(note));
       var card = `<div class="card ${item._id}" >
       
       <div class="card-body" style='margin-bottom: 5px'>
         <h5 class="card-title">${item.title}</h5>
-        <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
+        <p class="card-text"><a href='${item.link}
+        '>${item.summary}</a></p>
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
         <a class="btn btn-primary comment" id="${item._id} ">Add comment</a>
+        <div id='note'></div>
         <textarea class='form-control acomment' rows='1' id='${item._id}' style='margin-top: 10px'></textarea>
     
       </div>
@@ -70,7 +75,9 @@ $(".sa").on("click", function(e) {
         commentVal = $(".acomment").val();
         console.log(commentVal);
         $(".acomment").val("");
-        $.post("/", commentVal);
+        $.post("/comment/" + id, { note: commentVal }).then(function(data) {
+          // $("#note").prepend(`<br>${data.note.note}`);
+        });
       });
       $(".rsave").on("click", function() {
         var id = $(this).attr("id");

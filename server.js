@@ -22,7 +22,7 @@ app.set("view engine", "handlebars");
 
 mongoose.connect(
   "mongodb://dolwin:mongo#333@ds249717.mlab.com:49717/mongoscrapper",
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
 app.get("/", function(req, res) {
@@ -101,6 +101,19 @@ app.post("/saved/:id", function(req, res) {
     }
   );
 });
+
+app.post("/comment/:id", function(req, res) {
+  db.Note.create({ note: req.body.note }).then(function(returnedNote) {
+    return db.Article.findOneAndUpdate(
+      { _id: req.params.id },
+      { $push: { notes: returnedNote._id } },
+      { new: true }
+    ).then(function(data) {
+      res.json(data);
+    });
+  });
+});
+
 app.listen(PORT, function() {
   console.log("Server running on port", PORT);
 });

@@ -24,10 +24,12 @@ var Articleschema = new Schema({
     type: Date,
     default: Date.now
   },
-  note: {
-    type: Schema.Types.ObjectId,
-    ref: "Note"
-  }
+  notes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Note"
+    }
+  ]
 });
 
 var Article = mongoose.model("Article", Articleschema);
