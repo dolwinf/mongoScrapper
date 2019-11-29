@@ -64,22 +64,38 @@ $(".sa").on("click", function(e) {
         '>${item.summary}</a></p>
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
         <a class="btn btn-primary comment" id="${item._id} ">Add comment</a>
-        <div id='note'></div>
+        <div id='note' class='${item._id}'></div>
         <textarea class='form-control acomment' rows='1' id='${item._id}' style='margin-top: 10px'></textarea>
     
       </div>
     </div>`;
-
+      var commentSection = $(this)
+        .closest("textarea")
+        .attr("id");
       $("#news-articles").prepend(card);
-      item.notes.forEach(note => $("#note").prepend(`<br>${note}`));
+      item.notes.forEach(note =>
+        $.get("/comments/" + note).then(function(data) {
+          $(this)
+            .closest("#note")
+            .prepend(`<br>${data}`);
+        })
+      ); //
       $(".comment").on("click", function() {
         var id = $(this).attr("id");
         commentVal = $(".acomment").val();
         console.log(commentVal);
         $(".acomment").val("");
         $.post("/comment/" + id, { note: commentVal }).then(function(data) {
-          var newNote = data.notes[data.notes.length - 1];
-          $("#note").prepend(`<br>${newNote}`);
+          console.log(data);
+          $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
+            data
+          ) {
+            console.log("Data after posting new note", data.note);
+            $(commentSection).prepend(`<br>${data.note}`);
+          });
+          // $(this)
+          //   .closest("#note")
+          //   .prepend(`<br>${data.note}`);
         });
       });
       $(".rsave").on("click", function() {

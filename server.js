@@ -114,6 +114,12 @@ app.post("/comment/:id", function(req, res) {
   });
 });
 
+app.get("/comments/:id", function(req, res) {
+  db.Note.findOne({ _id: req.params.id }).then(function(data) {
+    res.json(data);
+  });
+});
+
 app.listen(PORT, function() {
   console.log("Server running on port", PORT);
 });
