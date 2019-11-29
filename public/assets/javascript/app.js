@@ -53,9 +53,9 @@ $(".sa").on("click", function(e) {
 
   $.get("/saved").then(function(data) {
     data.forEach(item => {
-      console.log(item.notes);
       // var notes = [];
       // item.note.forEach(note => notes.push(note));
+
       var card = `<div class="card ${item._id}" >
       
       <div class="card-body" style='margin-bottom: 5px'>
@@ -69,14 +69,17 @@ $(".sa").on("click", function(e) {
     
       </div>
     </div>`;
+
       $("#news-articles").prepend(card);
+      item.notes.forEach(note => $("#note").prepend(`<br>${note}`));
       $(".comment").on("click", function() {
         var id = $(this).attr("id");
         commentVal = $(".acomment").val();
         console.log(commentVal);
         $(".acomment").val("");
         $.post("/comment/" + id, { note: commentVal }).then(function(data) {
-          // $("#note").prepend(`<br>${data.note.note}`);
+          var newNote = data.notes[data.notes.length - 1];
+          $("#note").prepend(`<br>${newNote}`);
         });
       });
       $(".rsave").on("click", function() {
