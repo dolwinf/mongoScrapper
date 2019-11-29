@@ -68,7 +68,9 @@ app.get("/scrape", function(req, res) {
 });
 
 app.get("/articles", function(req, res) {
-  db.Article.find({}).then(data => res.json(data));
+  db.Article.find({})
+    .populate("note")
+    .then(data => res.json(data));
 });
 
 app.post("/delete/:id", function(req, res) {
@@ -86,9 +88,11 @@ app.post("/removesaved/:id", function(req, res) {
 });
 
 app.get("/saved", function(req, res) {
-  db.Article.find({ issaved: true }).then(function(data) {
-    res.json(data);
-  });
+  db.Article.find({ issaved: true })
+    .populate("note")
+    .then(function(data) {
+      res.json(data);
+    });
 });
 app.post("/saved/:id", function(req, res) {
   db.Article.findByIdAndUpdate({ _id: req.params.id }, { issaved: true }).then(

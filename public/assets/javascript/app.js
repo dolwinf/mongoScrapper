@@ -55,15 +55,21 @@ $(".sa").on("click", function(e) {
     data.forEach(item => {
       var card = `<div class="card ${item._id}" >
       
-      <div class="card-body">
+      <div class="card-body" style='margin-bottom: 5px'>
         <h5 class="card-title">${item.title}</h5>
         <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
+        <a class="btn btn-primary comment" id="${item._id} ">Add comment</a>
        
     
       </div>
     </div>`;
       $("#news-articles").prepend(card);
+      $(".comment").on("click", function() {
+        $(".card-body").append(
+          "<textarea class='form-control' rows='1' id='comment' style='margin-top: 10px'></textarea><button class='btn btn-primary' style='margin-top:5px' id='scomment'>Save Comment</button>"
+        );
+      });
       $(".rsave").on("click", function() {
         var id = $(this).attr("id");
         var classID = $(this).closest(".card");
