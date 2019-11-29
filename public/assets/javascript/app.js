@@ -60,15 +60,17 @@ $(".sa").on("click", function(e) {
         <p class="card-text"><a href='${item.link}'>${item.summary}</a></p>
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
         <a class="btn btn-primary comment" id="${item._id} ">Add comment</a>
-       
+        <textarea class='form-control acomment' rows='1' id='${item._id}' style='margin-top: 10px'></textarea>
     
       </div>
     </div>`;
       $("#news-articles").prepend(card);
       $(".comment").on("click", function() {
-        $(".card-body").append(
-          "<textarea class='form-control' rows='1' id='comment' style='margin-top: 10px'></textarea><button class='btn btn-primary' style='margin-top:5px' id='scomment'>Save Comment</button>"
-        );
+        var id = $(this).attr("id");
+        commentVal = $(".acomment").val();
+        console.log(commentVal);
+        $(".acomment").val("");
+        $.post("/", commentVal);
       });
       $(".rsave").on("click", function() {
         var id = $(this).attr("id");
