@@ -53,9 +53,6 @@ $(".sa").on("click", function(e) {
 
   $.get("/saved").then(function(data) {
     data.forEach(item => {
-      // var notes = [];
-      // item.note.forEach(note => notes.push(note));
-
       var card = `<div class="card ${item._id}" >
       
       <div class="card-body" style='margin-bottom: 5px'>
@@ -69,18 +66,23 @@ $(".sa").on("click", function(e) {
     
       </div>
     </div>`;
-      var commentSection = $(this)
-        .closest("textarea")
-        .attr("id");
+      // var commentSection = $(this)
+      //   .closest("textarea")
+      //   .attr("id");
       $("#news-articles").prepend(card);
-      item.notes.forEach(note =>
-        $.get("/comments/" + note).then(function(data) {
-          $(this)
-            .closest("#note")
-            .prepend(`<br>${data}`);
-        })
-      ); //
-      $(".comment").on("click", function() {
+      // item.notes.forEach(note =>
+      //   $.get("/comments/" + note).then(function(data) {
+      //     $(this)
+      //       .closest("#note")
+      //       .prepend(`<br>${data}`);
+      //   })
+      // ); //
+      var thisButton = $("a").closest(".comment");
+
+      $(thisButton).on("click", function() {
+        console.log("clicked");
+        var test = thisButton.attr("id");
+        console.log(test);
         var id = $(this).attr("id");
         commentVal = $(".acomment").val();
         console.log(commentVal);
@@ -90,8 +92,10 @@ $(".sa").on("click", function(e) {
           $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
             data
           ) {
-            console.log("Data after posting new note", data.note);
+            var commentSection = $(this).closest("textarea");
+            console.log(commentSection);
             $(commentSection).prepend(`<br>${data.note}`);
+            console.log("Data after posting new note", data.note);
           });
           // $(this)
           //   .closest("#note")
