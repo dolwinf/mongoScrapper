@@ -59,11 +59,14 @@ $(".sa").on("click", function(e) {
         <h5 class="card-title">${item.title}</h5>
         <p class="card-text"><a href='${item.link}
         '>${item.summary}</a></p>
+       
+        
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
-        <a class="btn btn-primary comment" id="${item._id} ">Add comment</a>
-        <div id='note' class='${item._id}'></div>
-        <textarea class='form-control acomment' rows='1' id='${item._id}' style='margin-top: 10px'></textarea>
-    
+        <a  class="btn btn-primary comment" id="${item._id} ">Add comment</a><br>
+        <input type='text 'class='form-control acomment' id='${item._id}' style='margin-top: 10px' />
+        <div id='note' class='${item._id}'></div><br>
+        
+       
       </div>
     </div>`;
       // var commentSection = $(this)
@@ -77,37 +80,35 @@ $(".sa").on("click", function(e) {
       //       .prepend(`<br>${data}`);
       //   })
       // ); //
-      var thisButton = $("a").closest(".comment");
+    });
+    $(".comment").on("click", function(e) {
+      e.preventDefault();
+      console.log("submitted");
 
-      $(thisButton).on("click", function() {
-        console.log("clicked");
-        var test = thisButton.attr("id");
-        console.log(test);
-        var id = $(this).attr("id");
-        commentVal = $(".acomment").val();
-        console.log(commentVal);
-        $(".acomment").val("");
-        $.post("/comment/" + id, { note: commentVal }).then(function(data) {
-          console.log(data);
-          $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
-            data
-          ) {
-            var commentSection = $(this).closest("textarea");
-            console.log(commentSection);
-            $(commentSection).prepend(`<br>${data.note}`);
-            console.log("Data after posting new note", data.note);
-          });
-          // $(this)
-          //   .closest("#note")
-          //   .prepend(`<br>${data.note}`);
+      var id = $(this).attr("id");
+      var commentVal = $(".acomment").val();
+
+      $(".acomment").val("");
+      $.post("/comment/" + id, { note: commentVal }).then(function(data) {
+        console.log(data);
+        $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
+          data
+        ) {
+          var commentSection = $(this).closest("textarea");
+          console.log(commentSection);
+          $(commentSection).prepend(`<br>${data.note}`);
+          console.log("Data after posting new note", data.note);
         });
+        // $(this)
+        //   .closest("#note")
+        //   .prepend(`<br>${data.note}`);
       });
-      $(".rsave").on("click", function() {
-        var id = $(this).attr("id");
-        var classID = $(this).closest(".card");
-        $.post("/removesaved/" + id).then(function() {
-          $(classID).remove();
-        });
+    });
+    $(".rsave").on("click", function() {
+      var id = $(this).attr("id");
+      var classID = $(this).closest(".card");
+      $.post("/removesaved/" + id).then(function() {
+        $(classID).remove();
       });
     });
   });
