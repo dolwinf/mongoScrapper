@@ -84,8 +84,12 @@ $(".sa").on("click", function(e) {
           data
         ) {
           $("#comment-section-" + id).prepend(
-            `<br>${data.note}<button class='btn btn-sm btn-danger' id='comment-button-${id}' style='margin-left: 10px'>X</button>`
+            `<div id='comment-remove-${id}'><br>${data.note}<button class='btn btn-sm btn-danger' id='comment-button-${id}' style='margin-left: 10px'>X</button></div>`
           );
+          $("#comment-button-" + id).on("click", function() {
+            console.log("clicked");
+            $("#comment-remove-" + id).empty(); //this is not available before the div is rendered
+          });
           $("#acomment").val("");
           console.log("Data after posting new note", data.note);
         });
