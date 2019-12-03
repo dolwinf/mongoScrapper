@@ -64,41 +64,30 @@ $(".sa").on("click", function(e) {
         <a class="btn btn-warning rsave" id="${item._id}">Remove from Saved</a>
         <a  class="btn btn-primary comment" id="${item._id} ">Add comment</a><br>
         <input type='text 'class='form-control acomment' id='${item._id}' style='margin-top: 10px' />
-        <div id='note' class='${item._id}'></div><br>
+        <div id='comment-section-${item._id}' ></div><br>
         
        
       </div>
     </div>`;
-      // var commentSection = $(this)
-      //   .closest("textarea")
-      //   .attr("id");
+
       $("#news-articles").prepend(card);
-      // item.notes.forEach(note =>
-      //   $.get("/comments/" + note).then(function(data) {
-      //     $(this)
-      //       .closest("#note")
-      //       .prepend(`<br>${data}`);
-      //   })
-      // ); //
     });
     $(".comment").on("click", function(e) {
       e.preventDefault();
-      console.log("submitted");
 
       var id = $(this).attr("id");
       var commentVal = $(".acomment").val();
 
-      $(".acomment").val("");
       $.post("/comment/" + id, { note: commentVal }).then(function(data) {
         console.log(data);
         $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
           data
         ) {
-          var commentSection = $(this).closest("textarea");
-          console.log(commentSection);
-          $(commentSection).prepend(`<br>${data.note}`);
+          $("#comment-section-" + id).prepend(`<br>${data.note}`);
+          $("#acomment").val("");
           console.log("Data after posting new note", data.note);
         });
+
         // $(this)
         //   .closest("#note")
         //   .prepend(`<br>${data.note}`);
