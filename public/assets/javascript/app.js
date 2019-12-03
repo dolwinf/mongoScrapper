@@ -83,7 +83,9 @@ $(".sa").on("click", function(e) {
         $.get("/comments/" + data.notes[data.notes.length - 1]).then(function(
           data
         ) {
-          $("#comment-section-" + id).prepend(`<br>${data.note}`);
+          $("#comment-section-" + id).prepend(
+            `<br>${data.note}<button class='btn btn-sm btn-danger' id='comment-button-${id}' style='margin-left: 10px'>X</button>`
+          );
           $("#acomment").val("");
           console.log("Data after posting new note", data.note);
         });
